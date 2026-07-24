@@ -10,11 +10,11 @@ beautifulsoup4
 markdown
 
 faiss-cpu
-
+unstructured
 python-dotenv
 
 tqdm
-
+faiss-cpu
 streamlit
 
 openai

@@ -1,16 +1,9 @@
 from app.config.settings import settings
 from app.utils.logger import logger
 
-
 def main():
-    print("Project Started")
-
-    print(settings.MODEL_NAME)
-
-    print(settings.CHUNK_SIZE)
-
-    logger.info("Application Started")
-
+    logger.info("RAG Assistant Started")
+    print("RAG Assistant Started")
 
 if __name__ == "__main__":
     main()
