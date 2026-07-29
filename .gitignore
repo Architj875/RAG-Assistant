@@ -1,17 +1,81 @@
+# Virtual Environment
 .venv/
 
+# Environment Variables
 .env
 
+# Python Cache
 __pycache__/
+*.py[cod]
+*$py.class
 
-*.pyc
-
-logs/
-
+# IDE
 .vscode/
-
 .idea/
 
+# OS Files
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Vector Database
+qdrant_db/
 data/vector_db/
 
+# Python Test Cache
+.pytest_cache/
+
+# Coverage Reports
+.coverage
+htmlcov/
+
+# Build Files
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual Environment
+.venv/
+
+# Environment Variables
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE
+.vscode/
+.idea/
+
+# OS Files
 .DS_Store
+
+# Logs
+logs/
+*.log
+
+# Vector Database
+qdrant_db/
+data/vector_db/
+
+# Python Test Cache
+.pytest_cache/
+
+# Coverage Reports
+.coverage
+htmlcov/
+
+# Build Files
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
