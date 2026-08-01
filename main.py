@@ -1,9 +1,45 @@
-from app.config.settings import settings
-from app.utils.logger import logger
+from fastapi import FastAPI
 
-def main():
-    logger.info("RAG Assistant Started")
-    print("RAG Assistant Started")
+from app.api.router import api_router
+from app.api.exception_handlers import register_exception_handlers
+from app.middleware.logging_middleware import logging_middleware
 
-if __name__ == "__main__":
-    main()
+app = FastAPI(
+    title="RAG Assistant API",
+    version="1.0.0",
+    description="""
+A production-ready Retrieval-Augmented Generation (RAG) API built with FastAPI.
+
+## Features
+
+- Upload PDF, DOCX, TXT, CSV, HTML and Markdown documents
+- Automatic chunking and embedding generation
+- Qdrant vector database
+- Semantic document retrieval
+- Gemini-powered question answering
+- RESTful API
+
+Built by Archit Joshi.
+""",
+    contact={
+        "name": "Archit Joshi",
+        "email": "architj875@email.com",
+    },
+    license_info={
+        "name": "MIT",
+    },
+)
+
+app.middleware("http")(logging_middleware)
+
+# Register all custom exception handlers
+register_exception_handlers(app)
+
+# Register all API routes
+app.include_router(api_router)
+
+@app.get("/")
+def root():
+    return {
+        "message": "Welcome to the RAG Assistant API!"
+    }

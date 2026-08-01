@@ -1,15 +1,18 @@
-from app.llms.llm_factory import LLMFactory
+from app.llms.base_llm import BaseLLM
 from app.rag.prompt_builder import PromptBuilder
-from app.vectorstores.vectorstore_factory import VectorStoreFactory
+from app.vectorstores.base_vectorstore import BaseVectorStore
 from app.config.settings import settings
 
 class RAGPipeline:
 
-    def __init__(self):
+    def __init__(
+        self, 
+        vector_store: BaseVectorStore,
+        llm: BaseLLM,
+    ):
 
-        self.vector_store = VectorStoreFactory.get_vector_store()
-
-        self.llm = LLMFactory.get_llm()
+        self.vector_store = vector_store
+        self.llm = llm
 
     def ask(self, question: str) -> str:
         documents = self.vector_store.similarity_search(
