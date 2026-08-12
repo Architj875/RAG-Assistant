@@ -1,81 +1,110 @@
-# Virtual Environment
-.venv/
+# ============================================================
+# Python
+# ============================================================
 
-# Environment Variables
-.env
-
-# Python Cache
 __pycache__/
 *.py[cod]
-*$py.class
+*.pyo
+*.pyd
 
-# IDE
-.vscode/
-.idea/
+.venv/
+venv/
+env/
 
-# OS Files
-.DS_Store
-
-# Logs
-logs/
-*.log
-
-# Vector Database
-qdrant_db/
-data/vector_db/
-
-# Python Test Cache
-.pytest_cache/
-
-# Coverage Reports
-.coverage
-htmlcov/
-
-# Build Files
+# Python build / packaging
 build/
 dist/
 *.egg-info/
+.eggs/
 
-# Jupyter
-.ipynb_checkpoints/
 
-# Virtual Environment
-.venv/
+# ============================================================
+# Environment / Secrets
+# ============================================================
 
-# Environment Variables
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Python Cache
-__pycache__/
-*.py[cod]
-*$py.class
 
-# IDE
+# ============================================================
+# Backend - Uploaded Documents
+# ============================================================
+
+backend/data/uploads/*
+!backend/data/uploads/.gitkeep
+
+
+# ============================================================
+# Test Documents
+# ============================================================
+
+test_documents/*
+!test_documents/.gitkeep
+
+
+# ============================================================
+# Local Vector Database
+# ============================================================
+
+backend/qdrant_db/
+qdrant_db/
+
+
+# ============================================================
+# Logs
+# ============================================================
+
+backend/logs/
+*.log
+
+
+# ============================================================
+# IDE / Editor
+# ============================================================
+
 .vscode/
 .idea/
 
-# OS Files
+*.swp
+*.swo
 .DS_Store
 
-# Logs
-logs/
-*.log
 
-# Vector Database
-qdrant_db/
-data/vector_db/
+# ============================================================
+# Frontend - Next.js
+# ============================================================
 
-# Python Test Cache
-.pytest_cache/
+frontend/.next/
+frontend/out/
+frontend/node_modules/
 
-# Coverage Reports
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# ============================================================
+# Testing / Coverage
+# ============================================================
+
 .coverage
+.coverage.*
 htmlcov/
+.pytest_cache/
+.tox/
+.nox/
 
-# Build Files
-build/
-dist/
-*.egg-info/
 
-# Jupyter
-.ipynb_checkpoints/
+# ============================================================
+# Temporary Files
+# ============================================================
+
+*.tmp
+*.temp
+*.bak
+# macOS
+.DS_Store

@@ -5,17 +5,51 @@ load_dotenv()
 
 
 class Settings:
-    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+    # --------------------------
+    # Google
+    # --------------------------
 
-    MODEL_NAME = os.getenv("MODEL_NAME")
+    GOOGLE_API_KEY = os.getenv(
+        "GOOGLE_API_KEY"
+    )
 
-    EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")
+    MODEL_NAME = os.getenv(
+        "MODEL_NAME"
+    )
 
-    CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", 500))
+    EMBEDDING_MODEL = os.getenv(
+        "EMBEDDING_MODEL"
+    )
 
-    CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", 100))
+    # --------------------------
+    # Chunking
+    # --------------------------
 
-    TOP_K = int(os.getenv("TOP_K", 5))
+    CHUNK_SIZE = int(
+        os.getenv("CHUNK_SIZE", 500)
+    )
+
+    CHUNK_OVERLAP = int(
+        os.getenv("CHUNK_OVERLAP", 100)
+    )
+
+    TOP_K = int(
+        os.getenv("TOP_K", 5)
+    )
+
+    # --------------------------
+    # Qdrant
+    # --------------------------
+
+    QDRANT_COLLECTION_NAME = os.getenv(
+        "QDRANT_COLLECTION_NAME",
+        "knowledge_base",
+    )
+
+    QDRANT_DB_PATH = os.getenv(
+        "QDRANT_DB_PATH",
+        "./qdrant_db",
+    )
 
 
 settings = Settings()

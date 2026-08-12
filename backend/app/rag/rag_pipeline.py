@@ -1,20 +1,21 @@
+from app.config.settings import settings
 from app.llms.base_llm import BaseLLM
 from app.rag.prompt_builder import PromptBuilder
+from app.rag.rag_result import RAGResult
 from app.vectorstores.base_vectorstore import BaseVectorStore
-from app.config.settings import settings
+
 
 class RAGPipeline:
 
     def __init__(
-        self, 
+        self,
         vector_store: BaseVectorStore,
         llm: BaseLLM,
     ):
-
         self.vector_store = vector_store
         self.llm = llm
 
-    def ask(self, question: str) -> str:
+    def ask(self, question: str) -> RAGResult:
         documents = self.vector_store.similarity_search(
             query=question,
             k=settings.TOP_K,
@@ -26,4 +27,8 @@ class RAGPipeline:
         )
 
         answer = self.llm.invoke(prompt)
-        return answer
+
+        return RAGResult(
+            answer=answer,
+            documents=documents,
+        )

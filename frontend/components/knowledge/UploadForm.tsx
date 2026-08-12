@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import type { RefObject } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { uploadDocument } from "@/services/upload.service";
@@ -8,9 +9,15 @@ import { useWorkspace } from "@/hooks/useWorkspace";
 
 import UploadDropzone from "./UploadDropzone";
 
-export default function UploadForm() {
-  const inputRef = useRef<HTMLInputElement>(null);
+interface UploadFormProps {
+  inputRef: RefObject<HTMLInputElement | null>;
+  showDropzone?: boolean;
+}
 
+export default function UploadForm({
+  inputRef,
+  showDropzone = true,
+}: UploadFormProps) {
   const {
     setUploadedFile,
     setIsUploading,
@@ -32,54 +39,57 @@ export default function UploadForm() {
       if (!response.success || !response.data) {
         throw new Error(
           response.error ?? "Upload failed."
-      );
+        );
       }
 
       setProgress(100);
 
       setUploadedFile(response.data);
-
       setUploadStage("Ready");
-
       setIsReady(true);
 
       toast.success("Knowledge base updated");
+
       setTimeout(() => {
         setProgress(0);
       }, 1200);
-    }
-    catch (err) {
+    } catch (err) {
       toast.error(
         err instanceof Error
           ? err.message
           : "Upload failed"
       );
+
+      setProgress(0);
     } finally {
       setIsUploading(false);
     }
   }
 
   function handleFileChange(
-    e: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ) {
-    const file = e.target.files?.[0];
+    const file = event.target.files?.[0];
 
     if (!file) return;
 
-    handleUpload(file);
+    void handleUpload(file);
 
-    e.target.value = "";
+    // Allows selecting the same file again later.
+    event.target.value = "";
   }
 
   return (
     <>
-      <UploadDropzone
-        progress={progress}
-        onChooseFile={() =>
-          inputRef.current?.click()
-        }
-        onFileDrop={handleUpload}
-      />
+      {showDropzone && (
+        <UploadDropzone
+          progress={progress}
+          onChooseFile={() =>
+            inputRef.current?.click()
+          }
+          onFileDrop={handleUpload}
+        />
+      )}
 
       <input
         ref={inputRef}

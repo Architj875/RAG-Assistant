@@ -13,8 +13,8 @@ export default function Container({
     <>
       <AnimatedBackground />
 
-      <main className="relative h-full">
-        <div className="mx-auto flex h-full max-w-[1700px] flex-col px-8 py-6">
+      <main className="relative flex h-full min-h-0 flex-col">
+        <div className="mx-auto flex min-h-0 flex-1 w-full max-w-[1700px] flex-col px-8 py-3">
           {children}
         </div>
       </main>

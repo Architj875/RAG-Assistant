@@ -23,6 +23,8 @@ export interface ChatData {
 export interface UploadData {
     filename: string;
     chunks_indexed: number;
+    embedding_model: string;
+    vector_store: string;
     message: string;
 }
 

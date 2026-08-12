@@ -12,11 +12,18 @@ import ChatHeader from "./ChatHeader";
 import MessageArea from "./MessageArea";
 import ChatComposer from "./ChatComposer";
 
-export default function ChatWindow() {
-  const { isReady } = useWorkspace();
+interface ChatWindowProps {
+  messages: ChatMessage[];
+  setMessages: React.Dispatch<
+    React.SetStateAction<ChatMessage[]>
+  >;
+}
 
-  const [messages, setMessages] =
-    useState<ChatMessage[]>([]);
+export default function ChatWindow({
+  messages,
+  setMessages,
+}: ChatWindowProps) {
+  const { isReady } = useWorkspace();
 
   const [loading, setLoading] =
     useState(false);
@@ -83,6 +90,7 @@ export default function ChatWindow() {
   return (
     <GlassCard className="h-full">
       <div className="flex h-full min-h-0 flex-col">
+
         {/* Header */}
         <ChatHeader />
 
@@ -100,6 +108,7 @@ export default function ChatWindow() {
           loading={loading}
           onSend={handleSend}
         />
+
       </div>
     </GlassCard>
   );

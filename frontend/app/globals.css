@@ -60,53 +60,71 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+
+/* ============================================================
+   LIGHT THEME
+   ============================================================ */
+
 :root {
   --radius: 0.75rem;
 
-  --background: #090b0a;
-  --foreground: #f5f6f5;
+  /* Page */
+  --background: #f1f4f2;
+  --foreground: #202823;
 
-  --card: rgba(19, 23, 21, 0.65);
-  --card-foreground: #f5f6f5;
+  /* Cards */
+  --card: rgba(225, 231, 227, 0.78);
+  --card-foreground: #202823;
 
-  --popover: rgba(19, 23, 21, 0.65);
-  --popover-foreground: #f5f6f5;
+  /* Popovers */
+  --popover: rgba(232, 237, 234, 0.96);
+  --popover-foreground: #202823;
 
-  --primary: #62b36f;
+  /* Green */
+  --primary: #3fa65a;
   --primary-foreground: #ffffff;
 
-  --secondary: rgba(255, 255, 255, 0.04);
-  --secondary-foreground: #f5f6f5;
+  /* Secondary */
+  --secondary: rgba(73, 91, 80, 0.07);
+  --secondary-foreground: #29332d;
 
-  --muted: rgba(255, 255, 255, 0.04);
-  --muted-foreground: #a3aba6;
+  /* Muted */
+  --muted: rgba(73, 91, 80, 0.06);
+  --muted-foreground: #68746d;
 
-  --accent: rgba(98, 179, 111, 0.08);
-  --accent-foreground: #f5f6f5;
+  /* Accent */
+  --accent: rgba(63, 166, 90, 0.09);
+  --accent-foreground: #263129;
 
+  /* System */
   --destructive: #ef4444;
 
-  --border: rgba(98, 179, 111, 0.18);
+  --border: rgba(72, 91, 79, 0.16);
+  --input: rgba(72, 91, 79, 0.11);
+  --ring: #3fa65a;
 
-  --input: rgba(255, 255, 255, 0.08);
-
-  --ring: #62b36f;
-
-  --chart-1: #62b36f;
-  --chart-2: #79c886;
-  --chart-3: #b67a3d;
+  /* Charts */
+  --chart-1: #3fa65a;
+  --chart-2: #62b36f;
+  --chart-3: #79c886;
   --chart-4: #2d6a4f;
   --chart-5: #1b4332;
 
-  --sidebar: rgba(16, 19, 17, 0.8);
-  --sidebar-foreground: #f5f6f5;
-  --sidebar-primary: #62b36f;
+  /* Sidebar */
+  --sidebar: rgba(224, 230, 226, 0.82);
+  --sidebar-foreground: #202823;
+  --sidebar-primary: #3fa65a;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: rgba(98, 179, 111, 0.08);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(98, 179, 111, 0.18);
-  --sidebar-ring: #62b36f;
+  --sidebar-accent: rgba(63, 166, 90, 0.08);
+  --sidebar-accent-foreground: #263129;
+  --sidebar-border: rgba(72, 91, 79, 0.16);
+  --sidebar-ring: #3fa65a;
 }
+
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
 
 .dark {
   --background: #090b0a;
@@ -133,7 +151,6 @@
   --destructive: #ef4444;
 
   --border: rgba(98, 179, 111, 0.18);
-
   --input: rgba(255, 255, 255, 0.08);
 
   --ring: #62b36f;
@@ -154,6 +171,11 @@
   --sidebar-ring: #62b36f;
 }
 
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -172,12 +194,12 @@
     background:
       radial-gradient(
         circle at 15% 20%,
-        rgba(74, 222, 128, 0.08),
+        rgba(74, 222, 128, 0.055),
         transparent 30%
       ),
       radial-gradient(
         circle at 85% 80%,
-        rgba(182, 122, 61, 0.05),
+        rgba(98, 179, 111, 0.035),
         transparent 35%
       ),
       var(--background);
@@ -186,12 +208,117 @@
   }
 
   ::selection {
-    background: rgba(98, 179, 111, 0.35);
-    color: white;
+    background: rgba(63, 166, 90, 0.25);
+    color: #1b3322;
   }
 }
 
-/* Scrollbar */
+
+/* ============================================================
+   LIGHT THEME — GLASS SURFACES
+   ============================================================ */
+
+/*
+   Your components currently use classes such as:
+
+   bg-white/[0.025]
+   bg-white/[0.035]
+   bg-white/[0.055]
+   border-white/[0.10]
+
+   Those are excellent for dark mode but become almost
+   invisible on a light background.
+
+   These overrides give the light theme its own glass language.
+*/
+
+:root:not(.dark) .bg-white\/\[0\.025\] {
+  background-color: rgba(214, 222, 217, 0.55);
+}
+
+:root:not(.dark) .bg-white\/\[0\.035\] {
+  background-color: rgba(224, 230, 226, 0.72);
+}
+
+:root:not(.dark) .bg-white\/\[0\.045\] {
+  background-color: rgba(216, 224, 219, 0.78);
+}
+
+:root:not(.dark) .bg-white\/\[0\.055\] {
+  background-color: rgba(211, 220, 214, 0.82);
+}
+
+:root:not(.dark) .bg-white\/\[0\.065\] {
+  background-color: rgba(205, 216, 209, 0.86);
+}
+
+
+/* Light borders */
+
+:root:not(.dark) .border-white\/\[0\.06\] {
+  border-color: rgba(72, 91, 79, 0.10);
+}
+
+:root:not(.dark) .border-white\/\[0\.08\] {
+  border-color: rgba(72, 91, 79, 0.13);
+}
+
+:root:not(.dark) .border-white\/\[0\.09\] {
+  border-color: rgba(72, 91, 79, 0.15);
+}
+
+:root:not(.dark) .border-white\/\[0\.10\] {
+  border-color: rgba(72, 91, 79, 0.17);
+}
+
+
+/* ============================================================
+   LIGHT THEME — GLASS SHADOWS
+   ============================================================ */
+
+:root:not(.dark) .shadow-\[0_10px_50px_rgba\(0\,0\,0\,0\.35\)\] {
+  box-shadow:
+    0 12px 45px rgba(54, 66, 59, 0.10),
+    0 2px 8px rgba(54, 66, 59, 0.05);
+}
+
+
+/* ============================================================
+   LIGHT THEME — RED DESTRUCTIVE STATES
+   ============================================================ */
+
+/*
+   Remove Document / Delete actions should become clearly
+   destructive only when the user interacts with them.
+ */
+
+:root:not(.dark) .hover\:bg-red-400\/\[0\.06\]:hover {
+  background-color: rgba(239, 68, 68, 0.07);
+}
+
+:root:not(.dark) .hover\:text-red-300:hover {
+  color: #dc2626;
+}
+
+:root:not(.dark) .hover\:border-red-400\/30:hover {
+  border-color: rgba(239, 68, 68, 0.32);
+}
+
+
+/* Toolbar trash button */
+
+:root:not(.dark) .hover\:bg-red-500\/10:hover {
+  background-color: rgba(239, 68, 68, 0.09);
+}
+
+:root:not(.dark) .hover\:text-red-400:hover {
+  color: #dc2626;
+}
+
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -202,15 +329,18 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(98, 179, 111, 0.25);
+  background: rgba(63, 166, 90, 0.20);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(98, 179, 111, 0.45);
+  background: rgba(63, 166, 90, 0.38);
 }
 
-/* Smooth transitions */
+
+/* ============================================================
+   SMOOTH TRANSITIONS
+   ============================================================ */
 
 button,
 input,
@@ -224,7 +354,10 @@ a {
     box-shadow 250ms ease;
 }
 
-/* Floating animation */
+
+/* ============================================================
+   FLOATING ANIMATION
+   ============================================================ */
 
 @keyframes floatSlow {
   0% {

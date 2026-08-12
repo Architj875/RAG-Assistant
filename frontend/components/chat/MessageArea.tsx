@@ -25,11 +25,10 @@ export default function MessageArea({
 }: Props) {
   if (!isReady) {
     return (
-      <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden">
-        <div className="max-w-md px-6 text-center">
+      <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden px-6">
+        <div className="max-w-md text-center">
           <p className="text-sm text-muted-foreground">
-            Upload a document to start chatting with your
-            knowledge base.
+            Upload a document to start chatting with your knowledge base.
           </p>
         </div>
       </div>
@@ -47,7 +46,7 @@ export default function MessageArea({
   }
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto px-8 py-6">
+    <div className="min-h-0 flex-1 overflow-y-auto px-7 py-6">
       <div className="mx-auto w-full max-w-4xl">
         <MessageList messages={messages} />
 

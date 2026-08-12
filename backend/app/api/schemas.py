@@ -11,8 +11,14 @@ class ChatRequest(BaseModel):
     question: str
 
 
+class Source(BaseModel):
+    filename: str
+    page: int | None = None
+
+
 class ChatData(BaseModel):
     answer: str
+    sources: list[Source]
 
 
 # ----------------------------
@@ -22,6 +28,8 @@ class ChatData(BaseModel):
 class UploadData(BaseModel):
     filename: str
     chunks_indexed: int
+    embedding_model: str
+    vector_store: str
     message: str
 
 

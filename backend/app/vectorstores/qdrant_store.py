@@ -1,77 +1,111 @@
+from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
-from langchain_qdrant import QdrantVectorStore
 
-from app.vectorstores.base_vectorstore import BaseVectorStore
+from app.config.settings import settings
 from app.embeddings.embedding_factory import EmbeddingFactory
+from app.vectorstores.base_vectorstore import BaseVectorStore
 
 
 class QdrantStore(BaseVectorStore):
+    def __init__(self):
+        self.collection_name = (
+            settings.QDRANT_COLLECTION_NAME
+        )
 
-    def __init__(
-        self,
-        collection_name: str = "employee_handbook",
-        db_path: str = "./qdrant_db",
-    ):
-
-        self.collection_name = collection_name
+        self.db_path = settings.QDRANT_DB_PATH
 
         # Embedding model
-        self.embedding = EmbeddingFactory.get_embedder().embedding_model
+        self.embedding = (
+            EmbeddingFactory.get_embedder().embedding_model
+        )
 
         # Local Qdrant database
-        self.client = QdrantClient(path=db_path)
+        self.client = QdrantClient(
+            path=self.db_path
+        )
 
-        # Create collection if it doesn't exist
+        self._initialize_collection()
+
+    # ----------------------------------
+    # Private Helpers
+    # ----------------------------------
+
+    def _collection_config(self):
+        """
+        Shared configuration for the Qdrant collection.
+        """
+
+        return VectorParams(
+            size=768,
+            distance=Distance.COSINE,
+        )
+
+    def _initialize_collection(self):
+        """
+        Create the collection if it doesn't exist.
+        """
+
         try:
-            self.client.get_collection(self.collection_name)
+            self.client.get_collection(
+                self.collection_name
+            )
 
         except Exception:
             self.client.create_collection(
                 collection_name=self.collection_name,
-                vectors_config=VectorParams(
-                    size=768,
-                    distance=Distance.COSINE,
-                ),
+                vectors_config=self._collection_config(),
             )
 
-        # LangChain Vector Store
+        self._initialize_vector_store()
+
+    def _initialize_vector_store(self):
+        """
+        Initialize the LangChain vector store wrapper.
+        """
+
         self.vector_store = QdrantVectorStore(
             client=self.client,
             collection_name=self.collection_name,
             embedding=self.embedding,
         )
 
-    def add_documents(self, documents):
-        self.vector_store.add_documents(documents)
+    # ----------------------------------
+    # BaseVectorStore API
+    # ----------------------------------
 
-    def similarity_search(self, query: str, k: int = 5):
+    def add_documents(self, documents):
+        self.vector_store.add_documents(
+            documents
+        )
+
+    def similarity_search(
+        self,
+        query: str,
+        k: int = 5,
+    ):
         return self.vector_store.similarity_search(
             query=query,
             k=k,
         )
 
     def delete_collection(self):
+        """
+        Delete the active collection and recreate
+        an empty collection.
+        """
+
         try:
             self.client.delete_collection(
                 collection_name=self.collection_name
             )
         except Exception:
+            # Collection may not exist yet.
             pass
-
-    def recreate_collection(self):
-        self.delete_collection()
 
         self.client.create_collection(
             collection_name=self.collection_name,
-            vectors_config=VectorParams(
-                size=768,
-                distance=Distance.COSINE,
-            ),
+            vectors_config=self._collection_config(),
         )
 
-        self.vector_store = QdrantVectorStore(
-            client=self.client,
-            collection_name=self.collection_name,
-            embedding=self.embedding,
-        )
+        self._initialize_vector_store()

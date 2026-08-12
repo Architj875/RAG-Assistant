@@ -3,8 +3,6 @@
 import { FormEvent, useState } from "react";
 import { ArrowUp } from "lucide-react";
 
-import GlassButton from "@/components/ui/button/GlassButton";
-
 interface Props {
   loading: boolean;
   onSend: (question: string) => void;
@@ -16,9 +14,7 @@ export default function ChatInput({
 }: Props) {
   const [value, setValue] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  function submitMessage() {
     const question = value.trim();
 
     if (!question || loading) return;
@@ -27,25 +23,29 @@ export default function ChatInput({
     setValue("");
   }
 
+  function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+    submitMessage();
+  }
+
   function handleKeyDown(
     event: React.KeyboardEvent<HTMLTextAreaElement>
   ) {
-    if (event.key === "Enter" && !event.shiftKey) {
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey
+    ) {
       event.preventDefault();
-
-      const question = value.trim();
-
-      if (!question || loading) return;
-
-      onSend(question);
-      setValue("");
+      submitMessage();
     }
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative"
+      className="relative w-full"
     >
       <textarea
         value={value}
@@ -68,6 +68,7 @@ export default function ChatInput({
           pl-5
           pr-16
           text-sm
+          leading-6
           text-foreground
           outline-none
           backdrop-blur-xl
@@ -82,24 +83,37 @@ export default function ChatInput({
         "
       />
 
-      <GlassButton
+      <button
         type="submit"
-        disabled={
-          loading || !value.trim()
-        }
+        disabled={loading || !value.trim()}
+        aria-label="Send message"
         className="
           absolute
-          bottom-2
           right-2
+          top-[calc(50%-5px)]
+          flex
           h-10
           w-10
+          -translate-y-1/2
+          items-center
+          justify-center
           rounded-xl
+          border
+          border-primary/20
+          bg-primary/10
           p-0
+          text-primary
+          transition-all
+          duration-300
+          hover:border-primary/40
+          hover:bg-primary/15
+          hover:shadow-[0_0_20px_rgba(34,197,94,0.18)]
+          disabled:pointer-events-none
+          disabled:opacity-40
         "
-        aria-label="Send message"
       >
-        <ArrowUp className="h-4 w-4" />
-      </GlassButton>
+        <ArrowUp className="h-4 w-4 shrink-0" />
+      </button>
     </form>
   );
 }

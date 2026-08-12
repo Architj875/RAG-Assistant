@@ -16,8 +16,7 @@ export default function GlassCard({
     <Card
       className={cn(
         // Layout
-        "group relative",
-        "flex min-h-0 flex-col overflow-hidden",
+        "group relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden",
 
         // Glass
         "rounded-3xl",
