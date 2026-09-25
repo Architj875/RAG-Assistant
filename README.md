@@ -1,26 +1,30 @@
 # RAG Assistant
 
-A modular Retrieval-Augmented Generation (RAG) application for answering questions from uploaded documents using a generic, document-agnostic pipeline.
+> AI document intelligence for your own knowledge base
 
-The project combines a Python FastAPI backend with a Next.js frontend and includes a built-in ReAct agent mode alongside the standard retrieval flow:
+A modern Retrieval-Augmented Generation (RAG) system for turning uploaded documents into an interactive, queryable knowledge workspace.
 
-- Standard RAG retrieval
-- ReAct agent flow for multi-step, tool-driven reasoning workflows
+This project combines a Python FastAPI backend with a Next.js frontend and includes both:
 
-It is designed to work with mixed document types and to be flexible enough for real-world knowledge-base use cases.
+- Standard RAG retrieval for grounded question answering
+- ReAct agent mode for multi-step, tool-driven reasoning workflows
+
+It is built to work with mixed document types and is designed to be generic enough for real-world document ingestion use cases, not just a single file format or fixed workflow.
 
 ## Overview
 
-This project enables users to:
+RAG Assistant helps users turn scattered files into a usable retrieval layer for AI-powered search and Q&A. Users can upload documents, process them into smaller chunks, embed them into a vector database, and ask natural-language questions grounded in the indexed content.
 
-- upload documents in multiple formats
-- clean and chunk them for retrieval
-- create embeddings and index them in Qdrant
-- query the knowledge base semantically
-- answer grounded questions using Gemini
-- optionally use a ReAct-style agent for more advanced reasoning
+The application supports:
 
-The system is intentionally structured to be extensible and reusable for future experimentation, deployment, and product integrations.
+- document upload for multiple file types
+- preprocessing and chunking for retrieval
+- embeddings and semantic similarity search with Qdrant
+- grounded answer generation using Gemini
+- optional ReAct agent execution for more advanced workflows
+- a clean web interface for document interaction and chat
+
+This repository is intended as a practical, extensible foundation for document intelligence applications, research experiments, and real-world product workflows.
 
 ## Key Features
 
@@ -252,15 +256,19 @@ The project includes evaluation and experimentation folders for:
 
 These are useful for iterative tuning and understanding how retrieval quality changes across document types and chunking strategies.
 
-## Notes
+## Final Repository Cleanup Review
 
-This project is in active development and is designed as a practical research and product-oriented RAG system. It aims to balance:
+The project has been cleaned up to keep the repository focused on reusable product code rather than local experimentation artifacts.
 
-- modularity
-- experimentability
-- generic document support
-- usability
-- clear architecture
+Current repository hygiene includes:
+
+- single project-level README for the repo
+- ignored local secrets and environment variables
+- ignored generated outputs and vector database contents
+- ignored scratch evaluation and playground artifacts
+- preserved source code for the actual app and retriever pipeline
+
+This keeps the repository clean, shareable, and easier to maintain while preserving the work needed for experimentation and iteration.
 
 ## Roadmap
 
