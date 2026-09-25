@@ -10,9 +10,9 @@ export default function Header() {
         <span>AI Document Intelligence</span>
       </div>
 
-      <h1 className="mt-2 text-2xl font-newsreader tracking-tight text-[#F5F5F5]">
+      <h1 className="mt-2 text-2xl font-newsreader tracking-tight text-foreground">
         RAG Assistant{" "}
-        <span className="font-mono-jb text-[12px] tracking-widest">
+        <span className="font-mono-jb text-[12px] tracking-widest text-muted-foreground">
           v0.1
         </span>
       </h1>

@@ -36,63 +36,53 @@ export default function Sidebar() {
         overflow-hidden
         rounded-3xl
         border
-        border-white/[0.10]
-        bg-white/[0.035]
+        border-border
+        bg-card/80
         p-5
         backdrop-blur-3xl
-        shadow-[0_10px_50px_rgba(0,0,0,0.35)]
+        shadow-[0_10px_40px_rgba(15,23,42,0.06)]
         transition-all
         duration-300
         ease-out
         hover:-translate-y-1
         hover:border-primary/25
-        hover:bg-white/[0.045]
-        hover:shadow-[0_18px_60px_rgba(34,197,94,0.14)]
+        hover:bg-secondary/80
+        hover:shadow-[0_18px_60px_rgba(34,197,94,0.10)]
       "
     >
-      {/* Ambient glass highlight */}
       <div
         className="
           pointer-events-none
           absolute
           inset-0
           rounded-3xl
-          bg-[radial-gradient(circle_at_18%_8%,rgba(255,255,255,0.025),transparent_35%)]
+          bg-[radial-gradient(circle_at_18%_8%,rgba(255,255,255,0.02),transparent_35%)]
         "
       />
 
       <div className="relative z-10 flex h-full min-h-0 flex-col">
-
-        {/* =====================================================
-            DOCUMENT / UPLOAD
-        ====================================================== */}
-
         <div className="shrink-0">
-
-          {/* Existing document */}
           {hasDocument && !isUploading && (
             <div
               className="
                 group/document
                 rounded-3xl
                 border
-                border-white/[0.10]
-                bg-white/[0.055]
+                border-border
+                bg-secondary/70
                 p-5
-                shadow-[0_10px_35px_rgba(0,0,0,0.18)]
+                shadow-[0_10px_30px_rgba(15,23,42,0.04)]
                 backdrop-blur-xl
                 transition-all
                 duration-300
                 ease-out
                 hover:-translate-y-0.5
                 hover:border-primary/25
-                hover:bg-white/[0.065]
-                hover:shadow-[0_12px_40px_rgba(34,197,94,0.10)]
+                hover:bg-secondary/80
+                hover:shadow-[0_12px_40px_rgba(34,197,94,0.08)]
               "
             >
               <div className="flex items-start gap-4">
-
-                {/* Document icon */}
                 <div
                   className="
                     flex
@@ -124,9 +114,7 @@ export default function Sidebar() {
                   />
                 </div>
 
-                {/* Document information */}
                 <div className="min-w-0 flex-1">
-
                   <p
                     className="
                       text-[10px]
@@ -162,7 +150,6 @@ export default function Sidebar() {
                     Indexed successfully and ready for retrieval.
                   </p>
 
-                  {/* Status */}
                   <div
                     className="
                       mt-3
@@ -203,23 +190,11 @@ export default function Sidebar() {
             </div>
           )}
 
-          {/* Upload / replacement input
-
-              IMPORTANT:
-              UploadForm stays mounted even when a document exists.
-              This keeps its hidden file input available for
-              the "Replace Document" button.
-          */}
           <UploadForm
             inputRef={inputRef}
             showDropzone={!hasDocument || isUploading}
           />
-
         </div>
-
-        {/* =====================================================
-            KNOWLEDGE STATISTICS
-        ====================================================== */}
 
         <div className="mt-5 shrink-0">
           <KnowledgeStats
@@ -230,23 +205,17 @@ export default function Sidebar() {
           />
         </div>
 
-        {/* =====================================================
-            ACTIONS
-        ====================================================== */}
-
         {hasDocument && !isUploading && (
           <div
             className="
               mt-5
               shrink-0
               border-t
-              border-white/[0.08]
+              border-border
               pt-4
             "
           >
             <div className="space-y-2.5">
-
-              {/* Replace Document */}
               <GlassButton
                 type="button"
                 variant="primary"
@@ -267,7 +236,6 @@ export default function Sidebar() {
                 Replace Document
               </GlassButton>
 
-              {/* Remove Document */}
               <GlassButton
                 type="button"
                 variant="outline"
@@ -288,11 +256,9 @@ export default function Sidebar() {
                 <Trash2 className="h-4 w-4" />
                 Remove Document
               </GlassButton>
-
             </div>
           </div>
         )}
-
       </div>
     </aside>
   );

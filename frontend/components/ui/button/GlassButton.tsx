@@ -17,14 +17,12 @@ export default function GlassButton({
   return (
     <Button
       className={cn(
-        // Base
         "group/button relative overflow-hidden",
         "rounded-2xl",
         "px-5 py-3",
         "text-sm font-medium",
         "transition-all duration-300 ease-out",
 
-        // Primary
         variant === "primary" && [
           "border border-primary/20",
           "bg-primary/10",
@@ -35,20 +33,18 @@ export default function GlassButton({
           "hover:shadow-[0_0_30px_rgba(34,197,94,0.20)]",
         ],
 
-        // Outline
         variant === "outline" && [
-          "border border-white/10",
-          "bg-white/[0.035]",
+          "border border-border",
+          "bg-card/80",
           "text-foreground",
           "hover:-translate-y-0.5",
-          "hover:border-white/20",
-          "hover:bg-white/[0.055]",
+          "hover:border-primary/30",
+          "hover:bg-secondary/80",
         ],
 
-        // Ghost
         variant === "ghost" && [
           "text-muted-foreground",
-          "hover:bg-white/[0.05]",
+          "hover:bg-secondary/80",
           "hover:text-foreground",
         ],
 
@@ -56,16 +52,15 @@ export default function GlassButton({
       )}
       {...props}
     >
-      {/* Button-only reflection */}
       <div
         className="
           pointer-events-none
           absolute
           inset-0
           -translate-x-full
-          bg-gradient-to-r
+          bg-linear-to-r
           from-transparent
-          via-white/[0.08]
+          via-white/8
           to-transparent
           transition-transform
           duration-700

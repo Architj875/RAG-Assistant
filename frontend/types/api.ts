@@ -1,49 +1,55 @@
-// ----------------------------
-// Chat
-// ----------------------------
+// ============================================================
+// CHAT
+// ============================================================
 
 export interface ChatRequest {
-    question: string;
+  question: string;
+  mode?: "rag" | "react";
 }
 
 export interface Source {
-    filename: string;
-    page: number | null;
+  citation_id: number;
+  filename: string;
+  page: number | null;
+  page_label: string | null;
 }
 
 export interface ChatData {
-    answer: string;
-    sources: Source[];
+  answer: string;
+  sources: Source[];
 }
 
-// ----------------------------
-// Upload
-// ----------------------------
+
+// ============================================================
+// UPLOAD
+// ============================================================
 
 export interface UploadData {
-    filename: string;
-    chunks_indexed: number;
-    embedding_model: string;
-    vector_store: string;
-    message: string;
+  filename: string;
+  chunks_indexed: number;
+  embedding_model: string;
+  vector_store: string;
+  message: string;
 }
 
-// ----------------------------
-// Generic API Response
-// ----------------------------
+
+// ============================================================
+// GENERIC API RESPONSE
+// ============================================================
 
 export interface APIResponse<T> {
-    success: boolean;
-    data: T | null;
-    error: string | null;
+  success: boolean;
+  data: T | null;
+  error: string | null;
 }
 
-// ----------------------------
-// Chat History
-// ----------------------------
+
+// ============================================================
+// CHAT HISTORY
+// ============================================================
 
 export interface ChatMessage {
-    role: "user" | "assistant";
-    content: string;
-    sources?: Source[]
+  role: "user" | "assistant";
+  content: string;
+  sources?: Source[];
 }

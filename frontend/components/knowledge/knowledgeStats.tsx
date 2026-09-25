@@ -63,14 +63,14 @@ export default function KnowledgeStats({
               className="
                 group/stat
                 rounded-2xl
-                border border-white/[0.08]
-                bg-white/[0.025]
+                border border-border
+                bg-card/80
                 p-3
                 backdrop-blur-xl
                 transition-all duration-300
                 hover:-translate-y-0.5
                 hover:border-primary/20
-                hover:bg-white/[0.045]
+                hover:bg-secondary/70
                 hover:shadow-[0_8px_25px_rgba(34,197,94,0.08)]
               "
             >
@@ -78,8 +78,8 @@ export default function KnowledgeStats({
                 className="
                   flex h-8 w-8 items-center justify-center
                   rounded-xl
-                  border border-white/[0.08]
-                  bg-white/[0.035]
+                  border border-border
+                  bg-secondary/70
                   transition-all duration-300
                   group-hover/stat:border-primary/20
                   group-hover/stat:bg-primary/[0.08]

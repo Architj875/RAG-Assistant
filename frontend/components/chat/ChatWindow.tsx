@@ -25,8 +25,8 @@ export default function ChatWindow({
 }: ChatWindowProps) {
   const { isReady } = useWorkspace();
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<"rag" | "react">("rag");
 
   const messagesEndRef =
     useRef<HTMLDivElement>(null);
@@ -38,9 +38,7 @@ export default function ChatWindow({
     });
   }, [messages, loading]);
 
-  async function handleSend(
-    question: string
-  ) {
+  async function handleSend(question: string) {
     const userMessage: ChatMessage = {
       role: "user",
       content: question,
@@ -56,6 +54,7 @@ export default function ChatWindow({
     try {
       const response = await askQuestion({
         question,
+        mode,
       });
 
       const assistantMessage: ChatMessage = {
@@ -90,11 +89,11 @@ export default function ChatWindow({
   return (
     <GlassCard className="h-full">
       <div className="flex h-full min-h-0 flex-col">
+        <ChatHeader
+          mode={mode}
+          setMode={setMode}
+        />
 
-        {/* Header */}
-        <ChatHeader />
-
-        {/* Messages */}
         <MessageArea
           isReady={isReady}
           loading={loading}
@@ -103,12 +102,10 @@ export default function ChatWindow({
           onSuggestionClick={handleSend}
         />
 
-        {/* Composer */}
         <ChatComposer
           loading={loading}
           onSend={handleSend}
         />
-
       </div>
     </GlassCard>
   );

@@ -5,24 +5,47 @@ from app.utils.logger import logger
 
 
 class DocumentService:
-    def __init__(self, vector_store: BaseVectorStore):
+    """
+    Handles document loading, cleaning, chunking,
+    and indexing into the vector store.
+    """
+
+    def __init__(
+        self,
+        vector_store: BaseVectorStore,
+    ):
         self.vector_store = vector_store
 
-    def ingest_document(self, file_path: str):
+    def ingest_document(
+        self,
+        file_path: str,
+    ):
         try:
             logger.info(
                 "Starting document ingestion: %s",
                 file_path,
             )
 
-            loader = LoaderFactory.get_loader(file_path)
+            # ----------------------------------
+            # Load document
+            # ----------------------------------
 
-            documents = loader.load(file_path)
+            loader = LoaderFactory.get_loader(
+                file_path
+            )
+
+            documents = loader.load(
+                file_path
+            )
 
             logger.info(
                 "Loaded %d document(s)",
                 len(documents),
             )
+
+            # ----------------------------------
+            # Clean + chunk document
+            # ----------------------------------
 
             chunks = ChunkManager.process_documents(
                 documents
@@ -33,7 +56,73 @@ class DocumentService:
                 len(chunks),
             )
 
-            self.vector_store.add_documents(chunks)
+            # ----------------------------------
+            # DEBUG: Inspect chunks from
+            # relevant pages
+            # ----------------------------------
+
+            if chunks:
+
+                logger.info(
+                    "========== CHUNK SAMPLES =========="
+                )
+
+                for chunk in chunks:
+
+                    page = chunk.metadata.get(
+                        "page",
+                        -1,
+                    )
+
+                    if page in [30, 31]:
+
+                        logger.info(
+                            "\n"
+                            "--- CHUNK %s | PAGE %s ---\n"
+                            "%s",
+                            chunk.metadata.get(
+                                "chunk_id",
+                                "unknown",
+                            ),
+                            page,
+                            chunk.page_content,
+                        )
+
+                logger.info(
+                    "========== END CHUNK SAMPLES =========="
+                )
+
+            # ----------------------------------
+            # DEBUG: First chunk
+            # ----------------------------------
+
+            if chunks:
+
+                logger.info(
+                    "========== FIRST CHUNK =========="
+                )
+
+                logger.info(
+                    "%s",
+                    chunks[0].page_content[:1500],
+                )
+
+                logger.info(
+                    "Metadata: %s",
+                    chunks[0].metadata,
+                )
+
+                logger.info(
+                    "========== END FIRST CHUNK =========="
+                )
+
+            # ----------------------------------
+            # Index chunks into Qdrant
+            # ----------------------------------
+
+            self.vector_store.add_documents(
+                chunks
+            )
 
             logger.info(
                 "Successfully indexed %d chunks into Qdrant",
@@ -56,6 +145,7 @@ class DocumentService:
         """
         Delete the current vector collection.
         """
+
         logger.info(
             "Deleting vector collection..."
         )

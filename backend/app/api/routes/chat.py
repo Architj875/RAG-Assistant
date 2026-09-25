@@ -11,13 +11,16 @@ router = APIRouter()
     "/",
     response_model=APIResponse,
     summary="Ask a question",
-    description="Answers a user's question using the Retrieval-Augmented Generation (RAG) pipeline based on the indexed documents.",
+    description="Answers a user's question using either the standard RAG pipeline or the ReAct agent.",
 )
 def chat(
     request: ChatRequest,
     chat_service: ChatService = Depends(get_chat_service),
 ):
-    chat_data = chat_service.ask(request.question)
+    if request.mode == "react":
+        chat_data = chat_service.ask_react(request.question)
+    else:
+        chat_data = chat_service.ask(request.question)
 
     return APIResponse(
         success=True,

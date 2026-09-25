@@ -37,7 +37,7 @@ const themes: {
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] =
-    useState<Theme>("dark");
+    useState<Theme>("system");
 
   useEffect(() => {
     const storedTheme =
@@ -53,7 +53,7 @@ export default function ThemeSwitcher() {
       setTheme(storedTheme);
       applyTheme(storedTheme);
     } else {
-      applyTheme("dark");
+      applyTheme("system");
     }
   }, []);
 
@@ -135,11 +135,11 @@ export default function ThemeSwitcher() {
                     shadow-[0_0_20px_rgba(34,197,94,0.08)]
                   `
                   : `
-                    border-white/[0.08]
-                    bg-white/[0.025]
+                    border-border
+                    bg-secondary/70
                     text-muted-foreground
-                    hover:border-white/[0.14]
-                    hover:bg-white/[0.05]
+                    hover:border-primary/20
+                    hover:bg-secondary
                     hover:text-foreground
                   `
               }

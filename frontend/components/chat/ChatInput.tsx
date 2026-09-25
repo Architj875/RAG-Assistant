@@ -57,13 +57,13 @@ export default function ChatInput({
         rows={1}
         placeholder="Ask anything about your document..."
         className="
-          min-h-[56px]
+          min-h-14
           w-full
           resize-none
           rounded-2xl
           border
-          border-white/10
-          bg-white/[0.04]
+          border-border
+          bg-secondary/40
           py-4
           pl-5
           pr-16
@@ -76,7 +76,7 @@ export default function ChatInput({
           duration-300
           placeholder:text-muted-foreground
           focus:border-primary/30
-          focus:bg-white/[0.06]
+          focus:bg-secondary/80
           focus:shadow-[0_0_30px_rgba(34,197,94,0.08)]
           disabled:cursor-not-allowed
           disabled:opacity-50

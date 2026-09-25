@@ -1,19 +1,20 @@
-from typing import Any
-
 from pydantic import BaseModel
 
 
-# ----------------------------
-# Chat Schemas
-# ----------------------------
+# ============================================================
+# CHAT
+# ============================================================
 
 class ChatRequest(BaseModel):
     question: str
+    mode: str = "rag"
 
 
 class Source(BaseModel):
+    citation_id: int
     filename: str
-    page: int | None = None
+    page: int | None
+    page_label: str | None
 
 
 class ChatData(BaseModel):
@@ -21,9 +22,9 @@ class ChatData(BaseModel):
     sources: list[Source]
 
 
-# ----------------------------
-# Upload Schemas
-# ----------------------------
+# ============================================================
+# UPLOAD
+# ============================================================
 
 class UploadData(BaseModel):
     filename: str
@@ -33,11 +34,11 @@ class UploadData(BaseModel):
     message: str
 
 
-# ----------------------------
-# Common API Responses
-# ----------------------------
+# ============================================================
+# GENERIC API RESPONSE
+# ============================================================
 
 class APIResponse(BaseModel):
     success: bool
-    data: Any | None = None
-    error: str | None = None
+    data: object | None
+    error: str | None

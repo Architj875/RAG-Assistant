@@ -2,6 +2,7 @@ from functools import lru_cache
 
 from app.llms.llm_factory import LLMFactory
 from app.rag.rag_pipeline import RAGPipeline
+from app.rag.react_agent import ReactAgentRAG
 
 from app.services.chat_service import ChatService
 from app.services.document_service import DocumentService
@@ -40,13 +41,22 @@ def get_rag_pipeline():
     )
 
 
+@lru_cache
+def get_react_rag_pipeline():
+    return ReactAgentRAG(
+        vector_store=get_vector_store(),
+        llm=get_llm(),
+    )
+
+
 # --------------------------------------------------
 # Services
 # --------------------------------------------------
 
 def get_chat_service():
     return ChatService(
-        get_rag_pipeline()
+        pipeline=get_rag_pipeline(),
+        react_pipeline=get_react_rag_pipeline(),
     )
 
 

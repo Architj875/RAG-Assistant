@@ -89,15 +89,15 @@ export default function ChatEmptyState({
                 group
                 rounded-2xl
                 border
-                border-white/[0.08]
-                bg-white/[0.025]
+                border-border
+                bg-card/80
                 p-4
                 text-left
                 transition-all
                 duration-300
                 hover:-translate-y-0.5
                 hover:border-primary/20
-                hover:bg-primary/[0.05]
+                hover:bg-primary/[0.04]
                 hover:shadow-[0_0_30px_rgba(34,197,94,0.08)]
                 focus:outline-none
                 focus:ring-1
@@ -113,8 +113,8 @@ export default function ChatEmptyState({
                   justify-center
                   rounded-xl
                   border
-                  border-white/[0.08]
-                  bg-white/[0.035]
+                  border-border
+                  bg-secondary/70
                   transition-all
                   duration-300
                   group-hover:border-primary/20

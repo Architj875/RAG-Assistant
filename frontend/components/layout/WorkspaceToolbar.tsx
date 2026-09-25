@@ -25,16 +25,8 @@ export default function WorkspaceToolbar({
 }: WorkspaceToolbarProps) {
   return (
     <div className="flex min-w-0 items-center justify-between gap-4">
-
-      {/* =====================================================
-          LEFT INFORMATION
-      ====================================================== */}
-
       <div className="flex min-w-0 items-center">
-
-        {/* Document */}
         <div className="flex min-w-0 items-center gap-2 px-2.5">
-
           <FileText className="h-4 w-4 shrink-0 text-primary" />
 
           <div className="min-w-0 max-w-[240px]">
@@ -48,11 +40,9 @@ export default function WorkspaceToolbar({
           </div>
         </div>
 
-        <div className="mx-2 h-7 w-px bg-white/[0.08]" />
+        <div className="mx-2 h-7 w-px bg-border" />
 
-        {/* Model */}
         <div className="flex items-center gap-2 px-2.5">
-
           <Sparkles className="h-4 w-4 text-primary" />
 
           <div>
@@ -66,11 +56,9 @@ export default function WorkspaceToolbar({
           </div>
         </div>
 
-        <div className="mx-2 h-7 w-px bg-white/[0.08]" />
+        <div className="mx-2 h-7 w-px bg-border" />
 
-        {/* Status */}
         <div className="flex items-center gap-2 px-2.5">
-
           <span
             className={`h-1.5 w-1.5 rounded-full ${
               isReady
@@ -91,13 +79,7 @@ export default function WorkspaceToolbar({
         </div>
       </div>
 
-      {/* =====================================================
-          ACTIONS
-      ====================================================== */}
-
       <div className="flex shrink-0 items-center gap-1">
-
-        {/* Refresh */}
         <button
           type="button"
           onClick={onRefresh}
@@ -117,7 +99,6 @@ export default function WorkspaceToolbar({
           <RefreshCw className="h-4 w-4" />
         </button>
 
-        {/* Clear Chat */}
         <button
           type="button"
           onClick={onClear}
@@ -136,7 +117,6 @@ export default function WorkspaceToolbar({
           <Trash2 className="h-4 w-4" />
         </button>
 
-        {/* Settings */}
         <button
           type="button"
           onClick={onSettings}
@@ -154,7 +134,6 @@ export default function WorkspaceToolbar({
         >
           <Settings className="h-4 w-4" />
         </button>
-
       </div>
     </div>
   );

@@ -31,7 +31,7 @@ export default function SettingsDialog({
       className="
         fixed
         inset-0
-        z-[100]
+        z-100
         flex
         items-center
         justify-center
@@ -56,14 +56,12 @@ export default function SettingsDialog({
           overflow-hidden
           rounded-3xl
           border
-          border-white/[0.10]
-          bg-[#151817]/95
-          shadow-[0_25px_80px_rgba(0,0,0,0.55)]
+          border-border
+          bg-card/95
+          shadow-[0_20px_60px_rgba(20,30,24,0.10)]
           backdrop-blur-3xl
         "
       >
-        {/* Ambient glow */}
-
         <div
           className="
             pointer-events-none
@@ -74,16 +72,13 @@ export default function SettingsDialog({
         />
 
         <div className="relative z-10">
-
-          {/* Header */}
-
           <div
             className="
               flex
               items-start
               justify-between
               border-b
-              border-white/[0.08]
+              border-border
               px-6
               py-5
             "
@@ -116,7 +111,7 @@ export default function SettingsDialog({
                 text-muted-foreground
                 transition-all
                 duration-200
-                hover:bg-white/[0.06]
+                hover:bg-secondary/80
                 hover:text-foreground
               "
             >
@@ -124,12 +119,7 @@ export default function SettingsDialog({
             </button>
           </div>
 
-          {/* Content */}
-
           <div className="space-y-5 px-6 py-5">
-
-            {/* Appearance */}
-
             <section>
               <div className="mb-2.5">
                 <p className="text-xs font-medium text-foreground">
@@ -144,11 +134,7 @@ export default function SettingsDialog({
               <ThemeSwitcher />
             </section>
 
-            {/* Divider */}
-
-            <div className="h-px bg-white/[0.07]" />
-
-            {/* RAG Configuration */}
+            <div className="h-px bg-border" />
 
             <section>
               <div className="mb-3">
@@ -162,9 +148,6 @@ export default function SettingsDialog({
               </div>
 
               <div className="space-y-2.5">
-
-                {/* AI Model */}
-
                 <div
                   className="
                     flex
@@ -172,8 +155,8 @@ export default function SettingsDialog({
                     gap-3
                     rounded-2xl
                     border
-                    border-white/[0.08]
-                    bg-white/[0.025]
+                    border-border
+                    bg-secondary/70
                     px-4
                     py-3
                   "
@@ -187,7 +170,7 @@ export default function SettingsDialog({
                       items-center
                       justify-center
                       rounded-xl
-                      bg-primary/[0.08]
+                      bg-primary/8
                     "
                   >
                     <BrainCircuit className="h-4 w-4 text-primary" />
@@ -204,8 +187,6 @@ export default function SettingsDialog({
                   </div>
                 </div>
 
-                {/* Embedding Model */}
-
                 <div
                   className="
                     flex
@@ -213,8 +194,8 @@ export default function SettingsDialog({
                     gap-3
                     rounded-2xl
                     border
-                    border-white/[0.08]
-                    bg-white/[0.025]
+                    border-border
+                    bg-secondary/70
                     px-4
                     py-3
                   "
@@ -228,7 +209,7 @@ export default function SettingsDialog({
                       items-center
                       justify-center
                       rounded-xl
-                      bg-primary/[0.08]
+                      bg-primary/8
                     "
                   >
                     <Sparkles className="h-4 w-4 text-primary" />
@@ -252,8 +233,6 @@ export default function SettingsDialog({
                   </div>
                 </div>
 
-                {/* Vector Store */}
-
                 <div
                   className="
                     flex
@@ -261,8 +240,8 @@ export default function SettingsDialog({
                     gap-3
                     rounded-2xl
                     border
-                    border-white/[0.08]
-                    bg-white/[0.025]
+                    border-border
+                    bg-secondary/70
                     px-4
                     py-3
                   "
@@ -276,7 +255,7 @@ export default function SettingsDialog({
                       items-center
                       justify-center
                       rounded-xl
-                      bg-primary/[0.08]
+                      bg-primary/8
                     "
                   >
                     <Database className="h-4 w-4 text-primary" />
@@ -292,17 +271,14 @@ export default function SettingsDialog({
                     </p>
                   </div>
                 </div>
-
               </div>
             </section>
           </div>
 
-          {/* Footer */}
-
           <div
             className="
               border-t
-              border-white/[0.08]
+              border-border
               px-6
               py-4
             "
@@ -311,7 +287,6 @@ export default function SettingsDialog({
               RAG Assistant · v0.1
             </p>
           </div>
-
         </div>
       </div>
     </div>

@@ -32,26 +32,16 @@ export default function Home() {
   const [isRefreshing, setIsRefreshing] =
     useState(false);
 
-  // ============================================================
-  // CLEAR CHAT
-  // ============================================================
-
   function handleClearChat() {
     setMessages([]);
-
     toast.success("Chat cleared");
   }
-
-  // ============================================================
-  // REFRESH KNOWLEDGE BASE
-  // ============================================================
 
   async function handleRefresh() {
     if (!uploadedFile) {
       toast.error(
         "No document is currently uploaded."
       );
-
       return;
     }
 
@@ -82,13 +72,7 @@ export default function Home() {
         );
       }
 
-      // Update workspace with the
-      // latest backend information.
       setUploadedFile(response.data);
-
-      // The knowledge base has been rebuilt,
-      // so clear answers generated from the
-      // previous index.
       setMessages([]);
 
       toast.success(
@@ -116,10 +100,6 @@ export default function Home() {
     }
   }
 
-  // ============================================================
-  // SETTINGS
-  // ============================================================
-
   function handleSettings() {
     setShowSettings(
       (previous) => !previous
@@ -130,19 +110,10 @@ export default function Home() {
     setShowSettings(false);
   }
 
-  // ============================================================
-  // RENDER
-  // ============================================================
-
   return (
     <AppShell>
       <Container>
         <div className="flex h-full min-h-0 flex-col">
-
-          {/* =====================================================
-              TOP ROW: HEADER + TOOLBAR
-          ====================================================== */}
-
           <div
             className="
               grid
@@ -151,14 +122,9 @@ export default function Home() {
               gap-8
             "
           >
-
-            {/* Header */}
-
             <div>
               <Header />
             </div>
-
-            {/* Toolbar */}
 
             <div
               className="
@@ -169,18 +135,18 @@ export default function Home() {
                 w-full
                 rounded-3xl
                 border
-                border-white/[0.10]
-                bg-white/[0.035]
+                border-border
+                bg-card/80
                 px-5
                 py-2
-                shadow-[0_8px_30px_rgba(0,0,0,0.22)]
+                shadow-[0_8px_30px_rgba(15,23,42,0.08)]
                 backdrop-blur-3xl
                 transition-all
                 duration-300
                 ease-out
                 hover:border-primary/30
-                hover:bg-white/[0.055]
-                hover:shadow-[0_12px_40px_rgba(34,197,94,0.10)]
+                hover:bg-secondary/80
+                hover:shadow-[0_12px_40px_rgba(34,197,94,0.08)]
               "
             >
               <WorkspaceToolbar
@@ -204,10 +170,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* =====================================================
-              MAIN WORKSPACE
-          ====================================================== */}
-
           <div
             className="
               mt-6
@@ -218,14 +180,9 @@ export default function Home() {
               gap-8
             "
           >
-
-            {/* Sidebar */}
-
             <div className="min-h-0">
               <Sidebar />
             </div>
-
-            {/* Chat */}
 
             <div className="min-h-0 min-w-0">
               <MainPanel
@@ -234,10 +191,6 @@ export default function Home() {
               />
             </div>
           </div>
-
-          {/* =====================================================
-              SETTINGS DIALOG
-          ====================================================== */}
 
           <SettingsDialog
             open={showSettings}
@@ -249,7 +202,6 @@ export default function Home() {
               uploadedFile?.vector_store
             }
           />
-
         </div>
       </Container>
     </AppShell>

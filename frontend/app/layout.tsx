@@ -25,26 +25,72 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
+const themeScript = `
+(function () {
+  try {
+    var key = "rag-assistant-theme";
+    var storedTheme = localStorage.getItem(key);
+
+    var theme =
+      storedTheme === "light" ||
+      storedTheme === "dark" ||
+      storedTheme === "system"
+        ? storedTheme
+        : "system";
+
+    var root = document.documentElement;
+
+    root.classList.remove("light", "dark");
+
+    if (theme === "system") {
+      root.classList.add(
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+      );
+    } else {
+      root.classList.add(theme);
+    }
+  } catch (error) {
+    document.documentElement.classList.remove("light");
+    document.documentElement.classList.add(
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+    );
+  }
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<RootLayoutProps>) {
   return (
     <html
-  lang="en"
-  className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
->
-  <body className="h-full overflow-hidden bg-background">
-    <WorkspaceProvider>
-      {children}
+      lang="en"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: themeScript,
+          }}
+        />
+      </head>
 
-      <Toaster
-        position="top-right"
-        richColors
-        closeButton
-        theme="dark"
-      />
-    </WorkspaceProvider>
-  </body>
-</html>
+      <body className="h-full overflow-hidden bg-background">
+        <WorkspaceProvider>
+          {children}
+
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            theme="system"
+          />
+        </WorkspaceProvider>
+      </body>
+    </html>
   );
 }
