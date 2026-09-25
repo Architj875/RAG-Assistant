@@ -2,10 +2,10 @@
 
 A modular Retrieval-Augmented Generation (RAG) application for answering questions from uploaded documents using a generic, document-agnostic pipeline.
 
-The project combines a Python FastAPI backend with a Next.js frontend and supports both:
+The project combines a Python FastAPI backend with a Next.js frontend and includes a built-in ReAct agent mode alongside the standard retrieval flow:
 
 - Standard RAG retrieval
-- ReAct-style agent flow for more tool-like reasoning workflows
+- ReAct agent flow for multi-step, tool-driven reasoning workflows
 
 It is designed to work with mixed document types and to be flexible enough for real-world knowledge-base use cases.
 
@@ -231,9 +231,9 @@ After ingestion, you can:
 7. relevant context is passed into Gemini or the agent
 8. final answer is returned to the user
 
-## ReAct Support
+## ReAct Agent Implementation
 
-The project includes an agent-style execution path for situations where a multi-step reasoning flow is useful. This can help when a task benefits from:
+The project includes a working ReAct agent execution path for situations where a multi-step reasoning flow is useful. This is implemented as part of the app architecture and can be switched on from the frontend chat interface. It helps when a task benefits from:
 
 - stepwise reasoning
 - intermediate tool usage
