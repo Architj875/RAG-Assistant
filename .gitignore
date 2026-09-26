@@ -117,4 +117,16 @@ backend/playground/
 *.temp
 *.bak
 # macOS
+.DS_Storelogs/
+data/uploads/
+qdrant_db/
+evaluation/results/
+playground/
+frontend/.next/
+backend/data/
+backend/logs/
+.env
+.venv/
+venv/
+*.log
 .DS_Store

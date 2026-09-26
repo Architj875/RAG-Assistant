@@ -28,8 +28,16 @@ class ChatService:
                 citation_id = metadata.get("citation_id")
                 source = metadata.get("source", "Unknown")
                 filename = source.split("/")[-1]
+
                 page = metadata.get("page")
                 page_label = metadata.get("page_label")
+
+                location = metadata.get("location")
+                if isinstance(location, dict):
+                    if page_label is None:
+                        page_label = location.get("label")
+                    if page is None:
+                        page = location.get("start")
 
                 if citation_id is None:
                     logger.warning(
@@ -42,6 +50,9 @@ class ChatService:
                     unique_sources[citation_id] = Source(
                         citation_id=citation_id,
                         filename=filename,
+                        file_type=metadata.get("file_type"),
+                        location_kind=location.get("kind") if isinstance(location, dict) else None,
+                        location_label=location.get("label") if isinstance(location, dict) else page_label,
                         page=page,
                         page_label=page_label,
                     )
@@ -82,7 +93,6 @@ class ChatService:
         self,
         question: str,
     ) -> ChatData:
-
         try:
             logger.info(
                 "Received question (%d characters)",

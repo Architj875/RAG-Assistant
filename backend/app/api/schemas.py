@@ -13,8 +13,11 @@ class ChatRequest(BaseModel):
 class Source(BaseModel):
     citation_id: int
     filename: str
-    page: int | None
-    page_label: str | None
+    file_type: str | None = None
+    location_kind: str | None = None
+    location_label: str | None = None
+    page: int | None = None
+    page_label: str | None = None
 
 
 class ChatData(BaseModel):

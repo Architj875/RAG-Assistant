@@ -95,7 +95,7 @@ export default function UploadForm({
         ref={inputRef}
         hidden
         type="file"
-        accept=".pdf,.docx,.txt"
+        accept=".pdf,.docx,.txt,.csv,.md,.html"
         onChange={handleFileChange}
       />
     </>

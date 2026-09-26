@@ -248,30 +248,19 @@ class TextChunker:
                         section_title,
                     )
 
-                    # ------------------------------------------------
-                    # Page metadata for citations.
-                    #
-                    # Not every loader uses the same convention: some
-                    # emit a single "page" key (one Document per page),
-                    # the PDF loader emits "page_start"/"page_end"
-                    # (one Document per section, which can span pages).
-                    # Neither of those keys existed as "page"/"page_label"
-                    # before, so citation cards reading those exact
-                    # names always saw null. Resolve and set both
-                    # explicitly here.
-                    # ------------------------------------------------
+                    location = cls._resolve_location(document.metadata)
+                    metadata["location"] = location
+                    metadata["location_kind"] = location.get("kind")
+                    metadata["location_label"] = location.get("label")
+                    metadata["location_start"] = location.get("start")
+                    metadata["location_end"] = location.get("end")
 
-                    page, page_label = (
-                        cls._resolve_page_fields(
-                            document.metadata
-                        )
-                    )
-
-                    metadata["page"] = page
-
-                    metadata[
-                        "page_label"
-                    ] = page_label
+                    if location.get("kind") == "page":
+                        metadata["page"] = location.get("start")
+                        metadata["page_label"] = location.get("label")
+                    else:
+                        metadata["page"] = None
+                        metadata["page_label"] = None
 
                     # ------------------------------------------------
                     # Chunk metadata
@@ -458,17 +447,17 @@ class TextChunker:
         # --------------------------------------------------------
 
         text = text.replace(
-            "–",
+            "\u2013",
             "-",
         )
 
         text = text.replace(
-            "—",
+            "\u2014",
             "-",
         )
 
         text = text.replace(
-            "−",
+            "\u2212",
             "-",
         )
 
@@ -477,8 +466,8 @@ class TextChunker:
         # --------------------------------------------------------
 
         text = text.replace(
-            "●",
-            "•",
+            "\u25cf",
+            "\u2022",
         )
 
         # --------------------------------------------------------
@@ -550,20 +539,6 @@ class TextChunker:
                 normalized_lines.append("")
                 continue
 
-            # ----------------------------------------------------
-            # Try to separate a numbered heading from immediately
-            # following text.
-            #
-            # Example:
-            #
-            # 3 IntroductionThis document...
-            #
-            # becomes:
-            #
-            # 3 Introduction
-            # This document...
-            # ----------------------------------------------------
-
             separated = (
                 cls._split_numbered_embedded_heading(
                     line
@@ -615,24 +590,12 @@ class TextChunker:
 
         remainder = match.group(2).strip()
 
-        # --------------------------------------------------------
-        # If the line is already a short heading, don't split it.
-        # --------------------------------------------------------
-
         if (
             cls._looks_like_heading_line(
                 remainder
             )
         ):
             return None
-
-        # --------------------------------------------------------
-        # Search for a transition from a title-like prefix into
-        # normal prose.
-        #
-        # We deliberately do NOT use known words such as
-        # "Abstract", "Introduction", etc.
-        # --------------------------------------------------------
 
         boundary = cls._find_title_body_boundary(
             remainder
@@ -670,20 +633,6 @@ class TextChunker:
     def _find_title_body_boundary(
         text: str,
     ) -> Optional[int]:
-
-        # --------------------------------------------------------
-        # Find a lowercase-to-uppercase transition.
-        #
-        # Example:
-        #
-        # "IntroductionThis document..."
-        #
-        # The boundary is between:
-        #
-        # ...n|T...
-        #
-        # This is only a candidate, not automatically accepted.
-        # --------------------------------------------------------
 
         for index in range(1, len(text)):
 
@@ -766,10 +715,6 @@ class TextChunker:
             lines
         ):
 
-            # ----------------------------------------------------
-            # Determine whether this line is a structural heading.
-            # ----------------------------------------------------
-
             is_heading = (
                 cls._is_structural_heading(
                     lines,
@@ -778,10 +723,6 @@ class TextChunker:
             )
 
             if is_heading:
-
-                # ------------------------------------------------
-                # Save previous section.
-                # ------------------------------------------------
 
                 if current_content:
 
@@ -801,13 +742,6 @@ class TextChunker:
 
                         section_index += 1
 
-                # ------------------------------------------------
-                # Start new section.
-                #
-                # Heading becomes metadata.
-                # It is NOT placed in content.
-                # ------------------------------------------------
-
                 current_title = (
                     cls._clean_heading(
                         line
@@ -821,10 +755,6 @@ class TextChunker:
             current_content.append(
                 line
             )
-
-        # --------------------------------------------------------
-        # Save final section.
-        # --------------------------------------------------------
 
         if current_content:
 
@@ -841,11 +771,6 @@ class TextChunker:
                         "section_index": section_index,
                     }
                 )
-
-        # --------------------------------------------------------
-        # Only return structured sections when we actually found
-        # structural headings.
-        # --------------------------------------------------------
 
         has_headings = any(
             section["title"]
@@ -873,25 +798,11 @@ class TextChunker:
         if not line:
             return False
 
-        # ========================================================
-        # SIGNAL 1: MARKDOWN HEADING
-        # ========================================================
-
         if re.match(
             r"^#{1,6}\s+\S+",
             line,
         ):
             return True
-
-        # ========================================================
-        # SIGNAL 2: NUMBERED HEADING
-        #
-        # Examples:
-        #
-        # 1 Introduction
-        # 2. Methodology
-        # 3.1 Dataset
-        # ========================================================
 
         numbered = re.match(
             r"^\s*\d+(?:\.\d+)*\.?\s+(.+?)\s*$",
@@ -912,14 +823,6 @@ class TextChunker:
                 )
             ):
                 return True
-
-        # ========================================================
-        # SIGNAL 3: ROMAN NUMERAL HEADING
-        #
-        # I Introduction
-        # II Methodology
-        # IV Results
-        # ========================================================
 
         roman = re.match(
             r"^\s*[IVXLCDM]+\.?\s+(.+?)\s*$",
@@ -942,14 +845,6 @@ class TextChunker:
             ):
                 return True
 
-        # ========================================================
-        # SIGNAL 4: ALL CAPS
-        #
-        # RESULTS
-        # METHODOLOGY
-        # SYSTEM ARCHITECTURE
-        # ========================================================
-
         if (
             cls._is_short_line(line)
             and line.isupper()
@@ -965,14 +860,6 @@ class TextChunker:
             ):
                 return True
 
-        # ========================================================
-        # SIGNAL 5: SHORT TITLE-LIKE LINE
-        #
-        # We only use this when there is strong contextual evidence.
-        #
-        # Crucially, we do NOT simply use .istitle().
-        # ========================================================
-
         if cls._is_short_line(line):
 
             if cls._has_heading_context(
@@ -983,14 +870,6 @@ class TextChunker:
                 if cls._looks_like_heading_line(
                     line
                 ):
-
-                    # ------------------------------------------------
-                    # Guard against wrapped sentences masquerading as
-                    # headings, e.g. a PDF line break splitting
-                    # "Deliberate abuse of Sick" / "Leave can lead to
-                    # warnings...". A real heading rarely has its next
-                    # line start mid-clause.
-                    # ------------------------------------------------
 
                     next_line = cls._next_non_empty_line(
                         lines, index
@@ -1076,16 +955,8 @@ class TextChunker:
 
         words = line.split()
 
-        # --------------------------------------------------------
-        # Headings should be reasonably short.
-        # --------------------------------------------------------
-
         if len(words) > cls.MAX_HEADING_WORDS:
             return False
-
-        # --------------------------------------------------------
-        # Reject obvious sentence-like text.
-        # --------------------------------------------------------
 
         if re.search(
             r"[.!?]\s*$",
@@ -1093,27 +964,14 @@ class TextChunker:
         ):
             return False
 
-        # --------------------------------------------------------
-        # Reject very long lines.
-        # --------------------------------------------------------
-
         if len(line) > 120:
             return False
-
-        # --------------------------------------------------------
-        # A heading should contain at least one alphabetic
-        # character.
-        # --------------------------------------------------------
 
         if not any(
             char.isalpha()
             for char in line
         ):
             return False
-
-        # --------------------------------------------------------
-        # Reject lines that are mostly punctuation.
-        # --------------------------------------------------------
 
         alphanumeric = sum(
             char.isalnum()
@@ -1151,10 +1009,6 @@ class TextChunker:
         index: int,
     ) -> bool:
 
-        # --------------------------------------------------------
-        # Look ahead to the next non-empty line.
-        # --------------------------------------------------------
-
         for next_index in range(
             index + 1,
             min(
@@ -1170,8 +1024,6 @@ class TextChunker:
             if not next_line:
                 continue
 
-            # A heading followed immediately by another heading
-            # is weak evidence.
             if re.match(
                 r"^#{1,6}\s+",
                 next_line,
@@ -1181,7 +1033,6 @@ class TextChunker:
             if len(next_line) >= 40:
                 return True
 
-            # Short content can still be valid.
             if len(next_line.split()) >= 5:
                 return True
 
@@ -1200,20 +1051,11 @@ class TextChunker:
         index: int,
     ) -> bool:
 
-        # --------------------------------------------------------
-        # Need meaningful content after the candidate.
-        # --------------------------------------------------------
-
         if not cls._has_following_content(
             lines,
             index,
         ):
             return False
-
-        # --------------------------------------------------------
-        # A short line followed by a substantial paragraph is
-        # stronger evidence than a short line in isolation.
-        # --------------------------------------------------------
 
         for next_index in range(
             index + 1,
@@ -1278,8 +1120,8 @@ class TextChunker:
                 separators=[
                     "\n\n",
                     "\n",
-                    "• ",
-                    "● ",
+                    "\u2022 ",
+                    "\u25cf ",
                     "- ",
                     ". ",
                     "? ",
@@ -1308,7 +1150,6 @@ class TextChunker:
 
         text = text.strip()
 
-        # Remove accidental leading punctuation.
         text = re.sub(
             r"^[\s.,;:\-]+",
             "",
@@ -1346,11 +1187,9 @@ class TextChunker:
             .lower()
         )
 
-        # Exact heading.
         if normalized_chunk == normalized_title:
             return True
 
-        # Section-context-only chunk.
         if normalized_chunk in (
             f"section: {normalized_title}",
             f"section:{normalized_title}",
@@ -1376,10 +1215,6 @@ class TextChunker:
 
         if not lines:
             return "text"
-
-        # --------------------------------------------------------
-        # Table-like content.
-        # --------------------------------------------------------
 
         table_signals = 0
 
@@ -1407,15 +1242,11 @@ class TextChunker:
         ):
             return "table"
 
-        # --------------------------------------------------------
-        # List-like content.
-        # --------------------------------------------------------
-
         list_lines = sum(
             1
             for line in lines
             if re.match(
-                r"^(?:[-*•●]|\d+[.)])\s+",
+                r"^(?:[-*\u2022\u25cf]|\d+[.)])\s+",
                 line,
             )
         )
@@ -1487,62 +1318,175 @@ class TextChunker:
     # PAGE LABEL RESOLUTION
     # ============================================================
 
-    # ============================================================
-    # PAGE LABEL RESOLUTION
-    # ============================================================
-
     @staticmethod
-    def _resolve_page_fields(
-        metadata: dict,
-    ) -> tuple:
+    def _resolve_location(metadata: dict) -> dict:
+        """
+        Returns a normalized generic location dict:
+        {
+            "kind": "page" | "row" | "line" | "section" | "element" | "document",
+            "start": ...,
+            "end": ...,
+            "label": ...
+        }
+        """
+        location = metadata.get("location")
 
-        # --------------------------------------------------------
-        # Returns (page, page_label).
-        #
-        # "page" stays in whatever indexing the loader used
-        # internally (PyMuPDF/fitz pages are 0-indexed), for any
-        # code that needs to compare/sort pages programmatically.
-        #
-        # "page_label" is the human-facing string for citation
-        # display (1-indexed, "p. 12" / "pp. 12-14"), since nobody
-        # wants a source card citing "page 0".
-        # --------------------------------------------------------
+        if isinstance(location, dict):
+            kind = location.get("kind") or "document"
+            start = location.get("start")
+            end = location.get("end")
+            label = location.get("label")
 
-        if metadata.get("page") is not None:
-            page = metadata["page"]
-            human = page + 1 if isinstance(page, int) else page
-            return page, f"p. {human}"
+            if label:
+                return {
+                    "kind": kind,
+                    "start": start,
+                    "end": end,
+                    "label": label,
+                }
+
+            if kind == "page":
+                if start == end:
+                    return {
+                        "kind": "page",
+                        "start": start,
+                        "end": end,
+                        "label": f"p. {start}",
+                    }
+                return {
+                    "kind": "page",
+                    "start": start,
+                    "end": end,
+                    "label": f"pp. {start}-{end}",
+                }
+
+            if kind == "row":
+                if start == end:
+                    return {
+                        "kind": "row",
+                        "start": start,
+                        "end": end,
+                        "label": f"Row {start}",
+                    }
+                return {
+                    "kind": "row",
+                    "start": start,
+                    "end": end,
+                    "label": f"Rows {start}-{end}",
+                }
+
+            if kind == "line":
+                if start == end:
+                    return {
+                        "kind": "line",
+                        "start": start,
+                        "end": end,
+                        "label": f"Line {start}",
+                    }
+                return {
+                    "kind": "line",
+                    "start": start,
+                    "end": end,
+                    "label": f"Lines {start}-{end}",
+                }
+
+            if kind == "section":
+                return {
+                    "kind": "section",
+                    "start": start,
+                    "end": end,
+                    "label": f"Section: {start}",
+                }
+
+            if kind == "element":
+                return {
+                    "kind": "element",
+                    "start": start,
+                    "end": end,
+                    "label": f"Element: {start}",
+                }
+
+            return {
+                "kind": "document",
+                "start": None,
+                "end": None,
+                "label": "Document",
+            }
+
+        page = metadata.get("page")
+        if page is not None:
+            return {
+                "kind": "page",
+                "start": page,
+                "end": page,
+                "label": f"p. {page}",
+            }
 
         page_start = metadata.get("page_start")
         page_end = metadata.get("page_end")
 
-        if page_start is not None and page_end is not None:
-            start_human = page_start + 1
-            end_human = page_end + 1
+        if page_start is not None:
+            end = page_end if page_end is not None else page_start
 
-            if start_human == end_human:
-                label = f"p. {start_human}"
-            else:
-                label = f"pp. {start_human}-{end_human}"
+            if page_start == end:
+                return {
+                    "kind": "page",
+                    "start": page_start,
+                    "end": end,
+                    "label": f"p. {page_start}",
+                }
 
-            return page_start, label
+            return {
+                "kind": "page",
+                "start": page_start,
+                "end": end,
+                "label": f"pp. {page_start}-{end}",
+            }
 
-        return None, "unknown"
+        return {
+            "kind": "document",
+            "start": None,
+            "end": None,
+            "label": "Document",
+        }
 
     @staticmethod
     def _resolve_page_label(
         metadata: dict,
     ) -> str:
 
-        # --------------------------------------------------------
-        # Some loaders emit a single "page" key (one Document per
-        # page). The PDF loader emits "page_start"/"page_end"
-        # instead (one Document per section, which can span pages).
-        # Support both so section_id doesn't silently fall back to
-        # "unknown" for every PDF-derived chunk.
-        # --------------------------------------------------------
+        if isinstance(metadata.get("location"), dict):
+            location = metadata["location"]
+            label = location.get("label")
+            if label:
+                return str(label)
 
-        if "page" in metadata:
+            kind = location.get("kind")
+            start = location.get("start")
+            end = location.get("end")
+
+            if kind == "page":
+                if start == end:
+                    return str(start)
+                return f"{start}-{end}"
+
+            if kind == "row":
+                if start == end:
+                    return str(start)
+                return f"{start}-{end}"
+
+            if kind == "line":
+                if start == end:
+                    return str(start)
+                return f"{start}-{end}"
+
+            if kind == "section":
+                return str(start)
+
+            if kind == "element":
+                return str(start)
+
+        if "page" in metadata and metadata["page"] is not None:
             return str(metadata["page"])
 
         page_start = metadata.get("page_start")
@@ -1594,14 +1538,12 @@ class TextChunker:
 
         line = line.strip()
 
-        # Remove Markdown markers.
         line = re.sub(
             r"^#{1,6}\s*",
             "",
             line,
         )
 
-        # Normalize whitespace.
         line = re.sub(
             r"\s+",
             " ",

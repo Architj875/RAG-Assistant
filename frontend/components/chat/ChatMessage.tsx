@@ -369,14 +369,14 @@ export default function ChatMessage({
             className="
               mx-0.5
               inline-flex
-              h-[19px]
-              min-w-[19px]
+              h-4.75
+              min-w-4.75
               items-center
               justify-center
               rounded-md
               border
-              border-white/[0.10]
-              bg-white/[0.05]
+              border-white/10
+              bg-white/5
               px-1
               align-baseline
               cursor-pointer
@@ -478,15 +478,15 @@ export default function ChatMessage({
               rounded-br-md
               border
               border-primary/15
-              bg-primary/[0.08]
+              bg-primary/8
               px-5
               py-4
             `
             : `
               rounded-2xl
               border
-              border-white/[0.06]
-              bg-white/[0.025]
+              border-white/6
+              bg-white/2.5
               px-5
               py-4
             `
@@ -555,11 +555,11 @@ export default function ChatMessage({
             ref={popupRef}
             className="
               fixed
-              z-[9999]
-              w-[280px]
+              z-9999
+              w-70
               rounded-xl
               border
-              border-white/[0.10]
+              border-white/10
               bg-[#151715]
               px-3
               py-3
@@ -591,7 +591,7 @@ export default function ChatMessage({
                 w-2
                 -translate-x-1/2
                 rotate-45
-                border-white/[0.10]
+                border-white/10
                 bg-[#151715]
               "
               style={{
@@ -642,7 +642,7 @@ export default function ChatMessage({
                   rounded-lg
                   border
                   border-primary/15
-                  bg-primary/[0.08]
+                  bg-primary/8
                 "
               >
                 <FileText
@@ -713,7 +713,7 @@ export default function ChatMessage({
                   rounded-md
                   text-muted-foreground
                   transition
-                  hover:bg-white/[0.06]
+                  hover:bg-white/6
                   hover:text-foreground
                 "
                 aria-label="Close citation"
@@ -736,7 +736,7 @@ export default function ChatMessage({
               className="
                 mt-2.5
                 border-t
-                border-white/[0.06]
+                border-white/6
                 pt-2
               "
             >
@@ -773,7 +773,7 @@ export default function ChatMessage({
             rounded-xl
             border
             border-white/10
-            bg-white/[0.04]
+            bg-white/4
           "
         >
           <User

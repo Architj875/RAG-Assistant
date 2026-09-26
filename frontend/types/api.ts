@@ -10,6 +10,9 @@ export interface ChatRequest {
 export interface Source {
   citation_id: number;
   filename: string;
+  file_type?: string | null;
+  location_kind?: string | null;
+  location_label?: string | null;
   page: number | null;
   page_label: string | null;
 }

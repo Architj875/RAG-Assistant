@@ -55,7 +55,7 @@ export default function ChatEmptyState({
             rounded-[20px]
             border
             border-primary/10
-            bg-white/[0.025]
+            bg-white/2.5
           "
         />
 
@@ -74,7 +74,7 @@ export default function ChatEmptyState({
       </p>
 
       {/* Suggestions */}
-      <div className="mt-7 grid w-full max-w-[820px] gap-3 sm:grid-cols-3">
+      <div className="mt-7 grid w-full max-w-205 gap-3 sm:grid-cols-3">
         {suggestions.map((suggestion) => {
           const Icon = suggestion.icon;
 
@@ -97,7 +97,7 @@ export default function ChatEmptyState({
                 duration-300
                 hover:-translate-y-0.5
                 hover:border-primary/20
-                hover:bg-primary/[0.04]
+                hover:bg-primary/4
                 hover:shadow-[0_0_30px_rgba(34,197,94,0.08)]
                 focus:outline-none
                 focus:ring-1

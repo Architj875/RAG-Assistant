@@ -33,34 +33,49 @@ export default function SourceCard({
   const [position, setPosition] =
     useState<PopupPosition | null>(null);
 
-  /**
-   * Convert the backend page label into
-   * a human-friendly UI label.
-   *
-   * Backend:
-   *   "p. 31"
-   *   "pp. 20-25"
-   *
-   * UI:
-   *   "Page 31"
-   *   "Pages 20-25"
-   */
-  const formatPageLabel = (
-    pageLabel: string | null
+  const formatLocationLabel = (
+    label: string | null
   ): string => {
-    if (!pageLabel) {
+    if (!label) {
       return "Document source";
     }
 
-    if (pageLabel.startsWith("pp. ")) {
-      return `Pages ${pageLabel.slice(4)}`;
+    if (label.startsWith("pp. ")) {
+      return `Pages ${label.slice(4)}`;
     }
 
-    if (pageLabel.startsWith("p. ")) {
-      return `Page ${pageLabel.slice(3)}`;
+    if (label.startsWith("p. ")) {
+      return `Page ${label.slice(3)}`;
     }
 
-    return pageLabel;
+    if (
+      label.startsWith("Rows ") ||
+      label.startsWith("Row ") ||
+      label.startsWith("Lines ") ||
+      label.startsWith("Line ") ||
+      label.startsWith("Section: ") ||
+      label.startsWith("Element: ")
+    ) {
+      return label;
+    }
+
+    return label;
+  };
+
+  const getDisplayLabel = (): string => {
+    if (source.location_label) {
+      return formatLocationLabel(
+        source.location_label
+      );
+    }
+
+    if (source.page_label) {
+      return formatLocationLabel(
+        source.page_label
+      );
+    }
+
+    return "Document source";
   };
 
   const updatePosition = () => {
@@ -93,8 +108,7 @@ export default function SourceCard({
       )
     );
 
-    const top =
-      rect.top - 8;
+    const top = rect.top - 8;
 
     setPosition({
       top,
@@ -104,7 +118,6 @@ export default function SourceCard({
 
   const handleClick = () => {
     updatePosition();
-
     setOpen(
       (previous) => !previous
     );
@@ -180,10 +193,6 @@ export default function SourceCard({
 
   return (
     <>
-      {/* =====================================================
-          CITATION BUTTON
-      ====================================================== */}
-
       <button
         ref={citationRef}
         type="button"
@@ -227,12 +236,6 @@ export default function SourceCard({
         {source.citation_id}
       </button>
 
-      {/* =====================================================
-          SOURCE POPUP
-          Rendered into document.body so it is not clipped
-          by the chat container.
-      ====================================================== */}
-
       {open &&
         position &&
         typeof document !==
@@ -274,10 +277,6 @@ export default function SourceCard({
               left: position.left,
             }}
           >
-            {/* =================================================
-                ARROW
-            ================================================== */}
-
             <span
               className="
                 absolute
@@ -301,10 +300,6 @@ export default function SourceCard({
               "
             />
 
-            {/* =================================================
-                SOURCE INFORMATION
-            ================================================== */}
-
             <div
               className="
                 flex
@@ -312,8 +307,6 @@ export default function SourceCard({
                 gap-2.5
               "
             >
-              {/* Icon */}
-
               <div
                 className="
                   flex
@@ -341,8 +334,6 @@ export default function SourceCard({
                 />
               </div>
 
-              {/* Source information */}
-
               <div
                 className="
                   min-w-0
@@ -369,16 +360,10 @@ export default function SourceCard({
                     text-muted-foreground
                   "
                 >
-                  {formatPageLabel(
-                    source.page_label
-                  )}
+                  {getDisplayLabel()}
                 </div>
               </div>
             </div>
-
-            {/* =================================================
-                CITATION LABEL
-            ================================================== */}
 
             <div
               className="
@@ -396,8 +381,7 @@ export default function SourceCard({
                 text-muted-foreground
               "
             >
-              Citation{" "}
-              {source.citation_id}
+              Citation {source.citation_id}
             </div>
           </div>,
           document.body
